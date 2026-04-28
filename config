@@ -31,7 +31,7 @@ gitcreds::gitcreds_set()
 
 Para trabajar con los ejemplos del curso, clonaremos el repositorio oficial directamente en RStudio. Utiliza el siguiente comando:
 
-usethis::create_from_github("cristinacalvolopez/DataScience24")
+usethis::create_from_github("cristinacalvolopez/dataScience26")
 
 Este comando descargará el proyecto y lo abrirá automáticamente en RStudio.
 
