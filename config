@@ -1,0 +1,66 @@
+# Configuración: Git, GitHub y RStudio
+
+## 1. Registro en GitHub
+
+El primer paso es registrar una cuenta en la plataforma de control de versiones. Accede a github.com y completa el proceso de registro.
+Crea un nombre de usuario y utiliza una cuenta de correo electrónico activa.
+Elige una contraseña segura y guárdala en un gestor de contraseñas.
+
+## 2. Conexión de RStudio con Git
+
+Para trabajar desde RStudio, es necesario configurar la identidad y los permisos de acceso. Ejecuta el siguiente código en la consola de RStudio:
+install.packages("usethis")
+library(usethis)
+
+Configurar identidad (usar el correo de tu cuenta de GitHub)
+
+use_git_config(user.name = "Tu Nombre", user.email = "tu@correo.com")
+
+Crear token de acceso
+Se abrirá una página web. Mantén los permisos por defecto y genera el token.
+
+create_github_token()
+
+Guardar el Token en RStudio
+Al ejecutar esta línea, aparecerá una ventana emergente para pegar el token.
+
+gitcreds::gitcreds_set()
+
+
+## 3. Clonar el repositorio del curso
+
+Para trabajar con los ejemplos del curso, clonaremos el repositorio oficial directamente en RStudio. Utiliza el siguiente comando:
+
+usethis::create_from_github("cristinacalvolopez/DataScience24")
+
+Este comando descargará el proyecto y lo abrirá automáticamente en RStudio.
+
+## 4. Flujo de trabajo colaborativo
+
+Para trabajar en equipo, realizaremos el siguiente procedimiento:
+
+### A. Crear y compartir un repositorio
+
+Una persona del equipo debe crear un repositorio nuevo en su cuenta personal de GitHub (público o privado).
+En el repositorio creado, ir a Settings > Collaborators.
+Hacer clic en Add people e invitar al resto de miembros del equipo mediante su nombre de usuario de GitHub.
+Todos los miembros deben aceptar la invitación recibida por correo electrónico.
+### B. Subir cambios individuales
+
+Cada miembro del equipo debe trabajar en su propia copia local del repositorio:
+- Clonar el repositorio compartido en RStudio (File > New Project > Version Control > Git).
+- Crear un archivo (por ejemplo, un R Markdown con un ejemplo breve).
+- Guardar el archivo.
+- En la pestaña Git de RStudio, seleccionar el archivo modificado.
+- Hacer clic en Commit, escribir un mensaje descriptivo y pulsar Commit.
+- Hacer clic en Push para enviar los cambios al servidor.
+
+Nota: Asegurar siempre realizar un Pull antes de trabajar para obtener los últimos cambios de los compañeros.
+
+## 5. Solución de problemas frecuentes
+
+Si surgen dificultades durante el trabajo con Git, revisa los siguientes casos habituales:
+- No permite hacer pull o push / Error de autenticación: Generalmente ocurre porque el token ha caducado. Ejecuta gitcreds::gitcreds_set() en la consola de RStudio y selecciona la opción de reemplazar credenciales para introducir un token nuevo.
+- Puedo hacer commit pero no push: Suele deberse a permisos insuficientes. Verifica que el token tiene el permiso repo activado al crearlo en GitHub. Si el repositorio es privado, asegúrate de que tienes invitación aceptada como colaborador.
+- Mensaje "X commits ahead": Indica que tienes cambios locales guardados que aún no están en el servidor. Haz push para sincronizarlos. Si aparece "X commits behind", realiza primero un pull para traer los cambios recientes.
+- Manejo de ramas (branches): Si tienes cambios en una rama secundaria y quieres unirlos a la principal, asegúrate de estar en la rama destino, usa el menú Merge en la pestaña Git de RStudio o ejecuta git merge nombre-de-rama en la terminal.
