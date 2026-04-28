@@ -1,0 +1,125 @@
+
+---
+title: "Ejemplo de Shiny"
+author: "Tu Nombre"
+date: "`r format(Sys.Date(), '%d de %B, %Y')`"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(ggplot2)
+library(bslib)
+library(dplyr)
+
+# Tema 
+mi_tema <- bs_theme(
+  version = 5, 
+  preset = "lux",
+  primary = "#2c3e50"
+)
+```
+
+# Introducción
+
+```{r echo=FALSE}
+page_fluid(
+  theme = mi_tema,
+  
+  # Estilos personalizados para fondo y tipografía
+  tags$style("body { background-color: #f8f9fa; } .card { margin-bottom: 20px; }"),
+  
+  # Cabecera
+  h2("📊 Analizador de Datos Dinámico", style = "text-align: center; color: #2c3e50; margin-top: 20px;"),
+  p("Visualización rápida y profesional de tus archivos CSV", style = "text-align: center; color: #7f8c8d;"),
+  
+  layout_sidebar(
+    sidebar = sidebar(
+      title = "Configuración",
+      fileInput("archivo", "1. Cargar archivo CSV", accept = ".csv"),
+      radioButtons("sep", "2. Separador:", 
+                   choices = c("Coma" = ",", "Punto y coma" = ";", "Tabulación" = "\t")),
+      hr(),
+      uiOutput("columna_x"),
+      uiOutput("columna_y"),
+      selectInput("tipo", "3. Tipo de gráfico", choices = c("Barras" = "bar", "Tarta" = "pie")),
+      selectInput("color", "4. Color", choices = c("Azul" = "steelblue", "Coral" = "coral", "Verde" = "seagreen")),
+      hr(),
+      div(style = "font-size: 0.8em; color: #999;", "Creado por: DataViz Analytics © 2026")
+    ),
+    
+    # Tarjeta de instrucciones (acordeón)
+    accordion(
+      accordion_panel(
+        "¿Cómo funciona esta herramienta?",
+        "1. Sube tu archivo CSV utilizando el botón de la izquierda.",
+        "2. Selecciona el tipo de separador que utiliza tu archivo.",
+        "3. Elige la variable categórica para el eje X y la numérica para el eje Y.",
+        "4. Cambia entre gráfico de barras o de tarta según necesites.",
+        icon = icon("info-circle")
+      )
+    ),
+    
+    # Tarjeta del gráfico
+    card(
+      card_header("Visualización de Datos"),
+      plotOutput("grafico", height = "500px")
+    )
+  )
+)
+```
+
+
+```{r echo=FALSE}
+datos <- reactive({
+    req(input$archivo)
+    read.csv(input$archivo$datapath, sep = input$sep)
+  })
+  
+  output$columna_x <- renderUI({
+    selectInput("x", "Eje X (Categoría):", choices = names(datos()))
+  })
+  
+  output$columna_y <- renderUI({
+    selectInput("y", "Eje Y (Valor):", choices = names(datos()))
+  })
+  
+  output$grafico <- renderPlot({
+    req(input$x, input$y)
+    
+    if (input$tipo == "bar") {
+      ggplot(datos(), aes(x = as.factor(.data[[input$x]]), y = .data[[input$y]])) +
+        geom_bar(stat = "identity", fill = input$color) +
+        theme_minimal() +
+        labs(x = input$x, y = input$y)
+      
+    } else {
+      ggplot(datos(), aes(x = factor(1), y = .data[[input$y]], fill = as.factor(.data[[input$x]]))) +
+        geom_bar(stat = "identity", width = 1) +
+        coord_polar(theta = "y") +
+        theme_void() +
+        labs(fill = input$x, x = NULL, y = NULL)
+    }
+  })
+```
+
+## ¿Qué es Shiny?
+
+**Shiny** es un framework de desarrollo para R que permite convertir análisis de datos en aplicaciones web interactivas. Su gran ventaja radica en que permite construir interfaces complejas, funcionales y atractivas utilizando únicamente el lenguaje R, eliminando la barrera de entrada de tener que aprender HTML, CSS o JavaScript.
+
+## ¿Por qué es útil?
+
+* **Democratización de datos:** Permite que usuarios sin conocimientos técnicos exploren resultados y generen sus propias conclusiones.
+* **Interactividad en tiempo real:** Los gráficos y tablas reaccionan instantáneamente a las entradas del usuario, facilitando la exploración multidimensional.
+* **Reducción de silos:** Elimina la necesidad de generar múltiples reportes estáticos (PDF/Excel) cada vez que un parámetro cambia.
+* **Ecosistema integrado:** Se integra perfectamente con librerías estándar como `ggplot2`, `plotly` y `tidyverse`.
+
+## Aplicaciones en Data Science
+
+Como Data Scientists, utilizamos Shiny como una herramienta estratégica para cerrar la brecha entre el modelado técnico y la toma de decisiones de negocio:
+
+* **Pruebas de concepto (PoC):** Desarrollar prototipos rápidos para validar nuevas ideas o visualizaciones con stakeholders antes de invertir recursos en desarrollo de software formal.
+* **Análisis "What-if":** Crear herramientas de simulación donde los usuarios de negocio pueden ajustar variables, parámetros o pesos de un modelo para observar cómo cambian las predicciones en tiempo real.
+* **Interfaz para modelos (ML):** Exponer modelos predictivos a través de una web app, permitiendo que equipos no técnicos obtengan inferencias o puntuaciones bajo demanda sin tocar una línea de código.
+* **Monitoreo de KPIs:** Construir cuadros de mando personalizados que permitan el seguimiento continuo de métricas, rendimiento de modelos en producción o calidad de los datos.
