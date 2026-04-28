@@ -1,24 +1,29 @@
-# Data Science 2026
+# Data Science 2026: La presentación del dato
 
-## Tema 5: La presentación del dato
+**Grado en Sociología (USAL)** | Profesores: Modesto Escobar y Cristina Calvo
 
-### Presentación de informes y comunicación de datos
+---
 
-Modesto Escobar y Cristina Calvo
+## Contenidos
 
-Grado en Sociología (USAL)
+### 1. Control de versiones
+* Fundamentos de **Git y GitHub**.
+* Integración y flujo de trabajo desde **RStudio**.
+* Gestión de proyectos colaborativos y reproducibilidad.
 
-# Objetivos de la clase
+### 2. Comunicación y R Markdown / Quarto
+* Informes estáticos: **PDF, Word y PowerPoint**.
+* Desarrollo web: Páginas *web* estáticas y **Shiny Apps**.
 
-  - Control de versiones: **Git y GitHub**.
+---
 
-   - Aprender técnicas para presentar informes claros y comprensibles.
-   - Uso de **R Mardown**.
+## Guía de archivos
 
-# Ejemplos de uso de RMarkdowm: 
+| Archivo | Objetivo |
+| :--- | :--- |
+| `Ejemplo_Diapositivas.qmd` | Presentaciones con Quarto |
+| `Ejemplo_Documento_Word.rmd` | Informes en formato Word |
+| `Ejemplo_Presentacion.rmd` | Diapositivas R Markdown |
+| `Ejemplo_Shiny.rmd` | Aplicaciones interactivas |
+| `Ejemplo_webclase.Rmd` | Creación de webs |
 
-  - Creación de páginas web
-  - Creación de documentos pdf
-  - Creación de documentos word
-  - Creación de diapositivas
-  - Shiny app
